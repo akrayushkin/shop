@@ -8,4 +8,8 @@ export class ProductsService {
   getProducts(): ProductModel[] {
     return productsMock;
   }
+
+  getProductById(id: number): ProductModel {
+    return productsMock.find(item => item.id === id);
+  }
 }

@@ -7,7 +7,7 @@
   max-width: 300px;
   height: 100%;
   padding: 10px;
-  
+
   &-button {
     padding: 10px;
     margin-top: auto;
@@ -15,4 +15,8 @@
 
     cursor: pointer;
   }
+}
+
+.product-card {
+  height: 100%;
 }

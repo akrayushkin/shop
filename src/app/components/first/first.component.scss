@@ -1,5 +1,9 @@
 
 .info {
+  display: flex;
+  flex-direction: column;
+
+  height: 100%;
   padding: 0;
   margin: 0;
 }
@@ -19,6 +23,7 @@
 }
 
 .info-field__description {
+  margin-bottom: auto;
   text-align: justify;
 }
 

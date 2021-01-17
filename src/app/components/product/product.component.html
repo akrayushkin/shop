@@ -1,4 +1,4 @@
 <div class="product">
-  <app-first [product]="product"></app-first>
+  <app-first class="product-card" [product]="product"></app-first>
   <button class="product-button"  (click)="onBuy()" [disabled]="!product.isAvailable">В корзину</button>
 </div>

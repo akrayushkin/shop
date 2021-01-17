@@ -13,4 +13,5 @@ export interface ProductModel {
   readonly price: number;
   readonly category: Categorys;
   readonly isAvailable: boolean;
+  quantity?: number;
 }
