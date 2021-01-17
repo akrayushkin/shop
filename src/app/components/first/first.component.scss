@@ -1,0 +1,34 @@
+
+.info {
+  padding: 0;
+  margin: 0;
+}
+
+.info-field {
+  list-style-type: none;
+  margin: 10px 0;
+}
+
+.info-field__title {
+  min-height: 2em;
+  margin-bottom: 30px;
+
+  text-align: center;
+  font-weight: 700;
+  font-size: larger;
+}
+
+.info-field__description {
+  text-align: justify;
+}
+
+.info-field__price {
+  margin: 20px 0;
+
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.info-field__price-rouble {
+  color: #b3b3b7;
+}

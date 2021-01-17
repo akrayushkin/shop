@@ -1,12 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
-enum Categorys {
-  smartphones = 'SMARTPHONES',
-  computers = 'COMPUTERS',
-  tvs = 'TVs',
-  dishes = 'DISHES',
-  stationery = 'STATIONERY'
-}
+import { Categorys, ProductModel } from '../../models/product.model';
 
 @Component({
   selector: 'app-first',
@@ -14,6 +8,8 @@ enum Categorys {
   styleUrls: ['./first.component.scss'],
 })
 export class FirstComponent implements OnInit {
+  @Input() product: ProductModel;
+
   name: string;
   description: string;
   price: number;
@@ -23,10 +19,10 @@ export class FirstComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    this.name = 'notebook';
-    this.description = 'portable personal computer';
-    this.price = 1000;
-    this.category = Categorys.computers;
-    this.isAvailable = true;
+    this.name = this.product.name;
+    this.description = this.product.description;
+    this.price = this.product.price;
+    this.category = this.product.category;
+    this.isAvailable = this.product.isAvailable;
   }
 }
