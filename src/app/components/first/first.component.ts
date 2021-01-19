@@ -19,10 +19,18 @@ export class FirstComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    this.name = this.product.name;
-    this.description = this.product.description;
-    this.price = this.product.price;
-    this.category = this.product.category;
-    this.isAvailable = this.product.isAvailable;
+    // альтернативный вариант: немножко короче, но для понимания,
+    // может быть сложнее
+    ({ name: this.name,
+       description: this.description,
+       price: this.price,
+       category: this.category,
+       isAvailable: this.isAvailable
+      } = this.product);
+    // this.name = this.product.name;
+    // this.description = this.product.description;
+    // this.price = this.product.price;
+    // this.category = this.product.category;
+    // this.isAvailable = this.product.isAvailable;
   }
 }
