@@ -4,6 +4,8 @@
   <td class="text-center">{{ product.price }}<span class="price-rouble"> ₽</span></td>
   <td class="text-center">{{ product.quantity }}</td>
   <td class="text-center">
+    <!-- Так не желательно делать. Компонент получил данные от родителя,
+    значит удалять должен родитель, а тут надо организовать аутпут -->
     <a class="button-remove" (click)="cartService.removeProductFromCart(product.id)">Удалить</a>
   </td>
 </ng-container>
