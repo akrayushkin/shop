@@ -1,0 +1,8 @@
+<div class="product-list">
+  <app-product
+    class="product__item"
+    *ngFor="let product of productsService.getProducts()"
+    [product]="product"
+    (buy)="onBuy($event)">
+  </app-product>
+</div>

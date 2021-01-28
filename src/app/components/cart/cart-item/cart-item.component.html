@@ -1,0 +1,13 @@
+<ng-container>
+  <td class="text-center cart-item__id">{{ index + 1 }}</td>
+  <td>{{ product.name }}</td>
+  <td class="text-center cart-item__price">{{ product.price }}<span class="price-rouble"> ₽</span></td>
+  <td class="text-center cart-item__quantity">
+    <button class="cart-item__quantity-button cart-item__quantity-button--decrease" (click)="this.decrease.emit(this.product.id)"></button>
+    <span class="cart-item__quantity-text">{{ product.quantity }}</span>
+    <button class="cart-item__quantity-button cart-item__quantity-button--increase"(click)="this.increase.emit(this.product.id)"></button>
+  </td>
+  <td class="text-center cart-item__action">
+    <a class="cart-item__button-remove" (click)="this.remove.emit(this.product.id)">Удалить</a>
+  </td>
+</ng-container>

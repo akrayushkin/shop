@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
-import { productsMock } from '../mocks/products.mock';
-import { ProductModel } from '../models/product.model';
+import { productsMock } from '../../mocks/products.mock';
+import { ProductModel } from '../../models/product.model';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ProductsService {
   constructor() { }
   getProducts(): ProductModel[] {

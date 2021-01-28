@@ -1,0 +1,24 @@
+<div class="product">
+  <ul class="product__info info">
+    <li class="info__field info__field--title">
+      <span>{{product.name}}</span>
+    </li>
+    <li class="info__field info__field--description">
+      <span>{{product.description}}</span>
+    </li>
+    <li class="info__field info__field--price">
+      <span>{{product.price}}</span><span class="info__field--price-rouble"> ₽</span>
+    </li>
+    <li class="info__field">
+      <span>Категория: </span><span>{{product.category}}</span>
+    </li>
+    <li class="info__field">
+      <span>В наличии: </span><span>{{product.isAvailable ? 'ДА' : 'НЕТ'}}</span>
+    </li>
+  </ul>
+  <button
+    class="product__button-add-to-cart"
+    (click)="this.buy.emit(this.product.id)"
+    [disabled]="!product.isAvailable"
+  >В корзину</button>
+</div>
