@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 
-import { ProductModel } from 'src/app/models/product.model';
+import { ProductModel } from '../../../models';
 
 @Component({
   // tslint:disable-next-line: component-selector

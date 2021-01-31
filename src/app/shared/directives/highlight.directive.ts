@@ -8,15 +8,13 @@ import {
   selector: '[appHighlight]',
 })
 export class HighlightDirective {
-  constructor() {}
-
-  @HostBinding('style.backgroundColor') backgroundColor = 'inherit';
+  @HostBinding('style.backgroundColor') backgroundColor = null;
 
   @HostListener('mouseenter') onMouseEnter(): void {
     this.backgroundColor = '#f5f5f6';
   }
 
   @HostListener('mouseleave') onMouseLeave(): void {
-    this.backgroundColor = 'inherit';
+    this.backgroundColor = null;
   }
 }

@@ -1,0 +1,58 @@
+import {
+  Component,
+  Inject,
+  OnInit,
+  Optional,
+} from '@angular/core';
+import {
+  ConfigOptionsService,
+  ConstantsService,
+  GeneratedString,
+  GeneratorService,
+  LocalStorageKeys,
+  LocalStorageService,
+  STORAGE,
+  сonstantsInstance,
+} from 'src/app/shared/services';
+import { ConfigModel } from '../../models';
+
+const initConfigOptions: ConfigModel = {
+  login: 'akrayushkin',
+  name: 'Anton',
+  email: 'Anton_Kraiushkin@epam.com',
+};
+
+@Component({
+  selector: 'app-first',
+  templateUrl: './first.component.html',
+  styleUrls: ['./first.component.scss'],
+  providers: [{ provide: ConstantsService, useValue: сonstantsInstance }],
+})
+export class FirstComponent implements OnInit {
+  name = 'Гость';
+  id: number | null;
+
+  constructor(
+    @Optional() private generatorService: GeneratorService,
+    @Optional() private configOptionsService: ConfigOptionsService,
+    @Optional() private constantsService: ConstantsService,
+    @Inject(GeneratedString) private generatedString: string,
+    @Inject(STORAGE) private localStorage: LocalStorageService
+  ) {}
+
+  ngOnInit(): void {
+    this.id = this.configOptionsService.setConfigOptions(initConfigOptions);
+    this.name = this.configOptionsService.getConfigOptionsById(this.id).name;
+    console.log(
+      'GeneratorService.generate(5):',
+      this.generatorService.generate(5)
+    );
+    console.log('GeneratedString(10):', this.generatedString);
+    console.log('ConstantsService:', this.constantsService.getAllData());
+    this.localStorage.set(LocalStorageKeys.name, initConfigOptions.name);
+    console.log(
+      'localStorage Name:',
+      this.localStorage.get(LocalStorageKeys.name)
+    );
+  }
+}

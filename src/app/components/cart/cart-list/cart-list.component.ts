@@ -11,7 +11,7 @@ export class CartListComponent {
   constructor(public cartService: CartService) { }
 
   onRemove(id: number): void {
-    this.cartService.removeProductFromCart(id);
+    this.cartService.removeProduct(id);
   }
 
   onIncreaseQuantity(id: number): void {
@@ -23,6 +23,6 @@ export class CartListComponent {
   }
 
   onClear(): void {
-    this.cartService.clearCart();
+    this.cartService.removeAllProducts();
   }
 }

@@ -1,6 +1,19 @@
 Deploy: https://akrayushkin-angular-shop.netlify.app/
 
-**0.1.1 (2020.01.28)**
+**0.1.3 (2020.01.31)**
+FEATURES:
+
+- create ConfigOptionsService;
+- create ConstantsService;
+- create GeneratorService;
+- create LocalStorageService;
+- create FontSizeDirective;
+
+REFACTORING:
+
+- CartService;
+
+**0.1.2 (2020.01.28)**
 FEATURES:
 
 - create CartModule;
@@ -18,7 +31,7 @@ REFACTORING:
 - CartListComponent;
 - СartItemComponent;
 
-**0.1.0 (2020.01.17)**
+**0.1.1 (2020.01.17)**
 
 FEATURES:
 

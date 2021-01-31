@@ -1,4 +1,4 @@
-import {ProductModel, Categorys} from '../models/product.model';
+import {ProductModel, Categorys} from '../models';
 
 export const productsMock: ProductModel[] = [
   {

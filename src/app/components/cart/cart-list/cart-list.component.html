@@ -1,4 +1,4 @@
-<div *ngIf="cartService.shoppingList.length; else emptyCart">
+<div *ngIf="!cartService.isEmptyCart; else emptyCart">
   <table class="cart-table">
     <thead>
     <tr>
@@ -13,7 +13,7 @@
       <tr
         class="cart-item"
         appHighlight
-        *ngFor="let product of cartService.shoppingList; let idx = index;"
+        *ngFor="let product of cartService.cartProducts; let idx = index;"
         app-cart-item
         [product]="product"
         [index]="idx"
@@ -24,7 +24,7 @@
       <tr class="cart-item cart-item--total">
         <td></td>
         <td>Всего</td>
-        <td class="text-center cart-item__price">{{cartService.totalPrice}}</td>
+        <td class="text-center cart-item__price">{{cartService.totalSum}}</td>
         <td class="text-center cart-item__quantity">
           <span class="cart-item__quantity-text">{{cartService.totalQuantity}}</span>
         </td>

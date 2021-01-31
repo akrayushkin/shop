@@ -14,6 +14,6 @@ export class ProductListComponent {
   ) { }
 
   onBuy(id: number): void {
-    this.cartService.addProductToCart(id);
+    this.cartService.addProduct(id);
   }
 }
