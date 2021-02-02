@@ -11,6 +11,7 @@ import { CartListComponent } from './cart-list/cart-list.component';
   imports: [CommonModule, SharedModule],
   declarations: [CartComponent, CartListComponent, CartItemComponent],
   exports: [CartComponent],
+  // ?
   entryComponents: [CartComponent]
 })
 

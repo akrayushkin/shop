@@ -8,6 +8,7 @@ import { ProductsComponent } from './products.component';
   imports: [CommonModule],
   declarations: [ProductsComponent, ProductComponent, ProductListComponent],
   exports: [ProductsComponent],
+  // Для каких целей используете entryComponents?
   entryComponents: [ProductsComponent]
 })
 export class ProductsModule {}
