@@ -9,6 +9,7 @@ import {
   ConstantsService,
   GeneratedString,
   GeneratorService,
+  GeneratorFactory,
   LocalStorageKeys,
   LocalStorageService,
   STORAGE,
@@ -26,7 +27,15 @@ const initConfigOptions: ConfigModel = {
   selector: 'app-first',
   templateUrl: './first.component.html',
   styleUrls: ['./first.component.scss'],
-  providers: [{ provide: ConstantsService, useValue: сonstantsInstance }],
+  providers: [
+    { provide: ConstantsService, useValue: сonstantsInstance },
+    {
+      provide: GeneratedString,
+      useFactory: GeneratorFactory(10),
+      deps: [GeneratorService],
+    },
+    { provide: STORAGE, useClass: LocalStorageService },
+  ],
 })
 export class FirstComponent implements OnInit {
   name = 'Гость';

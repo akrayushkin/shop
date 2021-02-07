@@ -1,7 +1,7 @@
 <ng-container>
   <td class="text-center cart-item__id">{{ index + 1 }}</td>
-  <td>{{ product.name }}</td>
-  <td class="text-center cart-item__price">{{ product.price }}<span class="price-rouble"> ₽</span></td>
+  <td>{{ product.name | uppercase}}</td>
+  <td class="text-center cart-item__price">{{ product.price | currency:'RUB':'symbol-narrow'}}</td>
   <td class="text-center cart-item__quantity">
     <button class="cart-item__quantity-button cart-item__quantity-button--decrease" (click)="this.decrease.emit(this.product.id)"></button>
     <span class="cart-item__quantity-text">{{ product.quantity }}</span>

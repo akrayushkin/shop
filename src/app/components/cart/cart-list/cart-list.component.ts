@@ -2,12 +2,22 @@ import { Component } from '@angular/core';
 
 import { CartService } from '../../../shared/services/cart.service';
 
+export interface Sort {
+  key: string;
+  isAsc: boolean;
+}
+
 @Component({
   selector: 'app-cart-list',
   templateUrl: './cart-list.component.html',
   styleUrls: ['./cart-list.component.scss']
 })
 export class CartListComponent {
+  sort: Sort = {
+    key: 'name',
+    isAsc: true
+  };
+
   constructor(public cartService: CartService) { }
 
   onRemove(id: number): void {
@@ -24,5 +34,12 @@ export class CartListComponent {
 
   onClear(): void {
     this.cartService.removeAllProducts();
+  }
+
+  onToggleSort(key: string): void {
+    if (this.sort.key === key) {
+      return;
+    }
+    this.sort.key = key;
   }
 }

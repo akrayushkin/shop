@@ -28,10 +28,64 @@
 .cart-table {
   margin: 0 auto;
   border-collapse: collapse;
-}
 
-.price-rouble {
-  color: #b3b3b7;
+  td,
+  th {
+    padding: 0 10px;
+  }
+
+  th {
+    color: #fff;
+    text-align: center;
+    text-transform: uppercase;
+    background: radial-gradient(ellipse at bottom,#7fcec5 0,#14557b 55%);
+    border: 1px solid #275f71;
+  }
+
+  &__column-name {
+    display: inline-block;
+    margin-top: 5px;
+
+    &--sort {
+      cursor: pointer;
+    }
+  }
+
+  &__sort {
+    display: flex;
+
+    padding-left: 0;
+    list-style: none;
+    margin: 0;
+    margin-left: 5px;
+
+    &-option {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 2em;
+    }
+
+    &-input {
+      display: none;
+    }
+
+    &-label {
+      margin-left: 10px;
+      cursor: pointer;
+    }
+  }
+
+  &__active-column {
+
+    .cart-table__column-name {
+      color: #FF7373;
+    }
+
+    .cart-table__sort-label--active {
+      color: #FF7373;
+    }
+  }
 }
 
 .cart__empty {

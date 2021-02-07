@@ -1,7 +1,7 @@
 <div class="product">
   <ul class="product__info info">
     <li class="info__field info__field--title">
-      <span>{{product.name}}</span>
+      <span>{{product.name | uppercase}}</span>
     </li>
     <li class="info__field info__field--description">
       <span>{{product.description}}</span>
@@ -10,7 +10,7 @@
       <span>{{product.price}}</span><span class="info__field--price-rouble"> ₽</span>
     </li>
     <li class="info__field">
-      <span>Категория: </span><span>{{product.category}}</span>
+      <span>Категория: </span><span>{{product.category | uppercase}}</span>
     </li>
     <li class="info__field">
       <span>В наличии: </span><span>{{product.isAvailable ? 'ДА' : 'НЕТ'}}</span>

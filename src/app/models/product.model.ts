@@ -1,9 +1,9 @@
 export enum Categorys {
-  smartphones = 'СМАРТФОНЫ',
-  computers = 'КОМЬЮТЕРЫ',
-  tvs = 'ТЕЛЕВИЗОРЫ',
-  dishes = 'ПОСУДА',
-  stationery = 'КАНЦТОВАРЫ'
+  smartphones = 'смартфоны',
+  computers = 'комьютеры',
+  tvs = 'телевизоры',
+  dishes = 'посуда',
+  stationery = 'канцтовары'
 }
 
 export interface ProductModel {

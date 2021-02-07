@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { productsMock } from '../../mocks/products.mock';
 import { ProductModel } from '../../models';
 
@@ -6,9 +7,12 @@ import { ProductModel } from '../../models';
   providedIn: 'root'
 })
 export class ProductsService {
-  constructor() { }
-  getProducts(): ProductModel[] {
-    return productsMock;
+  getProducts(): Observable<ProductModel[]> {
+    return new Observable(observe => {
+      setTimeout(() => {
+        observe.next(productsMock);
+      }, 1000);
+    });
   }
 
   getProductById(id: number): ProductModel {

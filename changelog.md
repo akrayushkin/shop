@@ -1,5 +1,21 @@
 Deploy: https://akrayushkin-angular-shop.netlify.app/
 
+**0.1.4 (2020.02.07)**
+FEATURES:
+
+- used uppercase pipe in components: cart-item.component (product name), product.component (product name and product category);
+- used pipe currency in components: cart-item.component (product price), cart-list.component (total sum);
+- used async pipe in component: product-list.component (get products);
+- create OrderByPipe;
+- used pipe orderBy in the component: cart-list.component (cart products);
+- added the ability to sort in the columns of the cart-list component table: name, cost and quantity;
+
+REFACTORING:
+
+- ProductsService;
+- CartListComponent (template);
+
+
 **0.1.3 (2020.01.31)**
 FEATURES:
 
