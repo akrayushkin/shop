@@ -11,4 +11,9 @@ import { ProductModel } from '../../../models';
 export class ProductComponent {
   @Input() product: ProductModel;
   @Output() buy = new EventEmitter<number>();
+  @Output() viewProduct = new EventEmitter<ProductModel>();
+
+  onViewProduct(): void {
+    this.viewProduct.emit(this.product);
+  }
 }

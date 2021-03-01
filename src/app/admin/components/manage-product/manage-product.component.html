@@ -1,0 +1,77 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+      <h3 class="pannel-title">
+        Product Form
+      </h3>
+  </div>
+  <div class="panel-body">
+      <form *ngIf="product" (ngSubmit)="onSaveProduct()" id="product-form" #form="ngForm">
+        <div class="form-group">
+          <label for="name">Название</label>
+          <input type="text"
+              min="3"
+              class="form-control"
+              id="name" name="name"
+              placeholder="Название"
+              required
+              [(ngModel)]="product.name">
+        </div>
+        <div class="form-group">
+          <label for="description">Описание</label>
+          <textarea
+            min="3"
+            class="form-control"
+            id="description" name="description"
+            placeholder="Описание"
+            required
+            [(ngModel)]="product.description"
+          ></textarea>
+        </div>
+        <div class="form-group">
+          <label for="price">Цена</label>
+          <input type="number"
+              class="form-control"
+              id="price" name="price"
+              placeholder="Цена"
+              required
+              [(ngModel)]="product.price">
+        </div>
+        <div class="form-group">
+          <label for="category">Категория</label>
+          <input type="text"
+              class="form-control"
+              id="category" name="category"
+              placeholder="Категория"
+              required
+              [(ngModel)]="product.category">
+        </div>
+        <div class="form-group">
+          <label for="quantity">Количество</label>
+          <input type="number"
+              class="form-control"
+              id="quantity" name="quantity"
+              placeholder="Количество"
+              [(ngModel)]="product.quantity">
+        </div>
+        <div class="form-group">
+          <label for="imageURL">Изображение</label>
+          <input type="text"
+              class="form-control"
+              id="imageURL" name="imageURL"
+              placeholder="Изображение"
+              [(ngModel)]="product.imageURL">
+        </div>
+        <button
+            type="submit"
+            class="btn btn-primary"
+            form="product-form"
+            [disabled]="form.invalid" >Save
+        </button>
+        <button
+            type="button"
+            class="btn btn-primary"
+            (click)="onGoBack()">Back
+        </button>
+      </form>
+  </div>
+</div>

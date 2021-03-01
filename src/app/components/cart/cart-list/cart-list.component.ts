@@ -2,10 +2,7 @@ import { Component } from '@angular/core';
 
 import { CartService } from '../../../shared/services/cart.service';
 
-export interface Sort {
-  key: string;
-  isAsc: boolean;
-}
+import { Sort } from '../../../models/sort.model';
 
 @Component({
   selector: 'app-cart-list',

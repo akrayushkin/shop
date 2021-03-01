@@ -1,5 +1,45 @@
 Deploy: https://akrayushkin-angular-shop.netlify.app/
 
+**0.1.5 (2020.03.01)**
+FEATURES:
+- create ProductsRoutingModule;
+- create ProductViewComponent;
+- create AdminModule;
+- create AdminRoutingModule;
+- create AdminComponent;
+- create AdminProductsComponent;
+- create AdminOrdersComponent;
+- create ManageProductComponent;
+- create CartRoutingModulet;
+- create HeaderMenuComponent;
+- create OrdersModule;
+- create OrdersRoutingModule;
+- create OrdersComponent;
+- create ProcessOrderComponent;
+- create AuthGuard;
+- create CanDeactivateGuard;
+- create OrdersGuard;
+- create ProductResolveGuard;
+- create LoginComponent;
+- create PathNotFoundComponent;
+- create DialogService;
+
+REFACTORING:
+- AppModule;
+- AppRoutingModule;
+- ProductsModule;
+- ProductComponent;
+- ProductListComponent;
+- ProductsService;
+- CartModule;
+- CartService;
+- CartComponent;
+- CartListComponent;
+- СartItemComponent;
+- FirstComponent;
+- productsMock(addImage);
+- ProductsService;
+
 **0.1.4 (2020.02.07)**
 FEATURES:
 

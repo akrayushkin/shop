@@ -1,0 +1,99 @@
+@import '../../../../styles/main';
+.admin-products {
+  display: flex;
+  flex-direction: column;
+
+  &-item {
+    &__quantity,
+    &__price,
+    &__action {
+      padding: 10px;
+    }
+
+    &__quantity {
+      &-text {
+        display: inline-block;
+        min-width: 3em;
+        padding: 0 5px;
+      }
+    }
+
+    &__button-remove {
+      color:indianred;
+      cursor: pointer;
+    }
+
+    &--total{
+      td {
+        padding-top: 10px;
+      }
+    }
+  }
+
+  &-table {
+    width: 100%;
+    border-collapse: collapse;
+
+    td {
+      padding: 10px;
+    }
+
+    th {
+      padding: 15px;
+      color: #fff;
+      text-align: center;
+      text-transform: uppercase;
+      background: $dark-background;
+    }
+
+    &__column-name {
+      display: inline-block;
+      margin-top: 5px;
+
+      &--sort {
+        cursor: pointer;
+      }
+    }
+
+    &__sort {
+      display: flex;
+
+      padding-left: 0;
+      list-style: none;
+      margin: 0;
+      margin-left: 5px;
+
+      &-option {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 2em;
+      }
+
+      &-input {
+        display: none;
+      }
+
+      &-label {
+        margin-left: 10px;
+        cursor: pointer;
+      }
+    }
+
+    &__active-column {
+
+      .admin-products-table__column-name {
+        color: $secondary-color;
+      }
+
+      .admin-products-table__sort-label--active {
+        color:  $secondary-color;
+      }
+    }
+  }
+
+  &__add-button {
+    margin-bottom: 30px;
+    margin-left: auto;
+  }
+}

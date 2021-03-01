@@ -1,11 +1,17 @@
+@import '../../../../styles/main';
+$image-gap: 10px;
+
 .product-list {
   display: flex;
-  justify-content: center;
   flex-wrap: wrap;
-
-  padding: 10px;
+  justify-content: space-between;
 }
 
 .product__item {
-  margin: 10px;
+  padding: 5px;
+  min-width: 300px;
+  &:last-child {
+    margin-right: auto;
+    margin-left: 4%;
+  }
 }

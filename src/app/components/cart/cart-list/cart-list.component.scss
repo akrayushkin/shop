@@ -1,8 +1,10 @@
+@import '../../../../styles/main';
+
 .cart-item {
   &__quantity,
   &__price,
   &__action {
-    padding: 0 10px;
+    padding: 10px;
   }
 
   &__quantity {
@@ -26,20 +28,19 @@
 }
 
 .cart-table {
-  margin: 0 auto;
+  width: 100%;
   border-collapse: collapse;
 
-  td,
-  th {
-    padding: 0 10px;
+  td {
+    padding: 10px;
   }
 
   th {
+    padding: 15px;
     color: #fff;
     text-align: center;
     text-transform: uppercase;
-    background: radial-gradient(ellipse at bottom,#7fcec5 0,#14557b 55%);
-    border: 1px solid #275f71;
+    background: $dark-background;
   }
 
   &__column-name {
@@ -79,11 +80,11 @@
   &__active-column {
 
     .cart-table__column-name {
-      color: #FF7373;
+      color: $secondary-color;
     }
 
     .cart-table__sort-label--active {
-      color: #FF7373;
+      color:  $secondary-color;
     }
   }
 }

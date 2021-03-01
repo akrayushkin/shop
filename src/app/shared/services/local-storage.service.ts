@@ -1,12 +1,16 @@
-import { InjectionToken } from '@angular/core';
+import { Injectable, InjectionToken } from '@angular/core';
 
 export enum LocalStorageKeys {
   id = 'id',
-  name = 'name'
+  name = 'name',
+  cart = 'cart'
 }
 
 export const STORAGE = new InjectionToken<LocalStorageService>('Storage');
 
+@Injectable({
+  providedIn: 'root'
+})
 export class LocalStorageService {
   set(key: LocalStorageKeys, value: string): void {
     localStorage.setItem(LocalStorageKeys[key], value);

@@ -14,4 +14,5 @@ export interface ProductModel {
   readonly category: Categorys;
   readonly isAvailable: boolean;
   readonly quantity?: number;
+  readonly imageURL?: string;
 }

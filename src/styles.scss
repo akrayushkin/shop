@@ -1,7 +1,10 @@
+@import './styles/main';
+
 html, body {
   font-family: 'Roboto', sans-serif;
   font-size: 14px;
-  color: #151528;
+  color: $dark-color;
+  margin: 0;
 }
 
 *,
@@ -10,11 +13,118 @@ html, body {
   box-sizing: border-box;
 }
 
-.title-second {
-  font-size: 2.1rem;
-  text-align: center;
+.container {
+  min-width: $mobile-width;
+  margin: 0 auto;
+  padding: 0 $mobile-pads;
+
+  @include media-mobilebig {
+    padding: 0 $mobile-big-pads;
+  }
+
+  @include media-mobile-portrait {
+    padding: 0 $mobile-portrait-pads;
+  }
+
+  @include media-tablet {
+    padding: 0 $tablet-pads;
+  }
+
+  @include media-small-desktop {
+    padding: 0 $desktop-small-pads;
+  }
+
+  @include media-desktop {
+    max-width: $desktop-width;
+    padding: 0 $desktop-pads;
+  }
+}
+
+.page-title {
+  font-size: 48px;
+  line-height: 48px;
 }
 
 .text-center {
   text-align: center;
+}
+
+.link {
+  outline: none;
+  color: $dark-color;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color .1s ease;
+}
+
+.nav {
+  &__tabs {
+    display:  flex;
+    flex-wrap: wrap;
+
+    margin: 0;
+    padding: 0;
+
+    list-style-type: none;
+
+    li {
+      margin-left: 0;
+      padding-left: 0;
+      margin-right: 20px;
+      margin-bottom: 20px;
+
+      &:last-child {
+        margin-right: 0;
+        margin-bottom: 0;
+      }
+    }
+  }
+  &__link {
+    display: block;
+
+    font-size: 18px;
+    color: $primary-color;
+
+    &:hover {
+      color: $secondary-color;
+    }
+  }
+}
+
+.button-primary {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box;
+  justify-content: center;
+
+  min-width: 180px;
+  height: 50px;
+  padding-left: 20px;
+  padding-right: 20px;
+
+  color: #fff;
+  font-size: 16px;
+
+  border-color: $secondary-color;
+  background-color: $secondary-color;
+
+  border: 1px solid;
+  border-radius: 100px;
+  white-space: nowrap;
+  cursor: pointer;
+  outline: none;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: default !important;
+  }
+
+  &:not(:disabled):hover {
+    opacity: 0.9;
+  }
+
+  &:not(:disabled):active {
+    opacity: 0.75;
+  }
 }

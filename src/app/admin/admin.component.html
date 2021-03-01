@@ -1,0 +1,12 @@
+<h2 class="page-title">Панель администратора</h2>
+<nav class="admin__nav nav">
+  <ul class="nav__tabs">
+    <li routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+      <a class="link nav__link" routerLink="./products">Товары</a>
+    </li>
+    <li routerLinkActive="active">
+      <a class="link nav__link" routerLink="./orders">Заказы</a>
+    </li>
+  </ul>
+</nav>
+<router-outlet></router-outlet>

@@ -1,0 +1,9 @@
+<h2 class="login-title page-title">Авторизация</h2>
+<p><b>Состояние: </b>{{message}}</p>
+<p>
+  <button class="login-button button-primary" (click)="onLogout()" *ngIf="authService.isLoggedIn; else loginBtn">Выйти</button>
+  <ng-template #loginBtn>
+    <button class="login-button button-primary" (click)="onLogin('user')">Войти под пользователем</button>
+    <button class="login-button button-primary" (click)="onLogin('admin')">Войти под администратором</button>
+  </ng-template>
+</p>

@@ -1,0 +1,28 @@
+<div class="product-view">
+  <div class="product-view__header">
+    <div class="product-view__header-image">
+      <img [src]="product.imageURL" alt="Product Image">
+    </div>
+    <div class="product-view__header-info info">
+      <h2 class="info__title">{{product.name}}</h2>
+      <div class="info__field">
+        <span>Категория: </span><span>{{product.category | uppercase}}</span>
+      </div>
+      <div class="info__field">
+        <span>В наличии: </span><span>{{product.isAvailable ? 'ДА' : 'НЕТ'}}</span>
+      </div>
+      <div class="info__field">
+        <h3>Описание:</h3>
+        <p>{{product.description}}</p>
+      </div>
+      <div class="info__price">
+        <span>{{product.price}}</span><span class="info__price-currency"> ₽</span>
+      </div>
+      <button
+        class="product-view__button-add-to-cart button-primary"
+        (click)="onBuy()"
+        [disabled]="!product.isAvailable"
+      >В корзину</button>
+    </div>
+  </div>
+</div>

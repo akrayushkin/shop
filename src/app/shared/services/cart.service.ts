@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-
 import { ProductModel } from '../../models';
-
+import { LocalStorageKeys, LocalStorageService } from './local-storage.service';
 import { ProductsService } from './products.service';
 
 @Injectable({
@@ -13,7 +12,12 @@ export class CartService {
   // tslint:disable-next-line: variable-name
   private _cartProducts: ProductModel[] = [];
 
-  constructor(private productsService: ProductsService) {}
+  constructor(
+    private productsService: ProductsService,
+    private localStorageService: LocalStorageService
+  ) {
+    this.init();
+  }
 
   get isEmptyCart(): boolean {
     return !this.cartProducts.length;
@@ -25,11 +29,10 @@ export class CartService {
 
   addProduct(id: number): void {
     if (!this.isProductInCart(id)) {
-      const product: ProductModel = {
-        ...this.productsService.getProductById(id),
-        quantity: 1
-      };
-      this._cartProducts = [...this.cartProducts, product];
+      this.productsService.getProductById(id)
+        .subscribe(product => {
+          this._cartProducts = [...this.cartProducts, {...product, quantity: 1}];
+        });
     } else {
       this.increaseQuantity(id);
     }
@@ -59,26 +62,40 @@ export class CartService {
     this.updateCartData();
   }
 
+  private init(): void {
+    this._cartProducts =
+      JSON.parse(this.localStorageService.get(LocalStorageKeys.cart)) || [];
+    this.updateTotalValues();
+  }
+
   private isProductInCart(id: number): boolean {
     return this.cartProducts.some((item) => item.id === id);
   }
 
   private changeQuantity(id: number, diffQuantity: number): void {
-    this._cartProducts = this.cartProducts.map((item) => {
-      return item.id === id
-        ? {
-            ...item,
-            quantity: item.quantity + diffQuantity,
-            price: this.productsService.getProductById(id).price * (item.quantity + diffQuantity),
-          }
-        : {
-          ...item,
-        };
-    });
-    this.updateCartData();
+    this.productsService.getProductById(id)
+      .subscribe(product => {
+        this._cartProducts = this.cartProducts.map((item) => {
+          return item.id === id
+            ? {
+                ...item,
+                quantity: item.quantity + diffQuantity,
+                price: product.price * (item.quantity + diffQuantity),
+              }
+            : {
+              ...item,
+            };
+        });
+        this.updateCartData();
+      });
   }
 
   private updateCartData(): void {
+    this.updateTotalValues();
+    this.localStorageService.set(LocalStorageKeys.cart, JSON.stringify(this.cartProducts));
+  }
+
+  private updateTotalValues(): void {
     this.totalSum = this.cartProducts.reduce(
       (sum, current) => sum + current.price,
       0

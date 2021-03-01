@@ -19,7 +19,7 @@ import { ConfigModel } from '../../models';
 
 const initConfigOptions: ConfigModel = {
   login: 'akrayushkin',
-  name: 'Anton',
+  name: 'Гость',
   email: 'Anton_Kraiushkin@epam.com',
 };
 
@@ -38,8 +38,9 @@ const initConfigOptions: ConfigModel = {
   ],
 })
 export class FirstComponent implements OnInit {
-  name = 'Гость';
+  name = 'Guest';
   id: number | null;
+  value: boolean = true;
 
   constructor(
     @Optional() private generatorService: GeneratorService,

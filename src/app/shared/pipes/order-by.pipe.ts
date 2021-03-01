@@ -10,7 +10,7 @@ export class OrderByPipe implements PipeTransform {
     key: string,
     isAsc: boolean = false
   ): Record<string, any>[] {
-    return value.sort(this.byField(key, isAsc));
+    return value?.sort(this.byField(key, isAsc));
   }
 
   byField(field: string, isAsc: boolean): (
@@ -21,8 +21,8 @@ export class OrderByPipe implements PipeTransform {
       let one = a[field];
       let two = b[field];
       if (!isNumber(one) && !isNumber(two)) {
-        one = String(one).toLocaleLowerCase();
-        two = String(two).toLocaleLowerCase();
+        one = String(one).toLowerCase();
+        two = String(two).toLowerCase();
       }
       if (one === two) {
         return 0;

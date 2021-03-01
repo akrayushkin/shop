@@ -1,10 +1,16 @@
 <div class="product">
   <ul class="product__info info">
-    <li class="info__field info__field--title">
-      <span>{{product.name | uppercase}}</span>
+    <li class="info__field--title">
+      <a class="link" (click)="onViewProduct()">
+        <span>{{product.name | uppercase}}</span>
+      </a>
     </li>
-    <li class="info__field info__field--description">
-      <span>{{product.description}}</span>
+    <li class="info__field--image">
+      <a class="link" (click)="onViewProduct()">
+        <div class="info__field--image-wrapper">
+          <img [src]="product.imageURL" alt="Product Image">
+        </div>
+      </a>
     </li>
     <li class="info__field info__field--price">
       <span>{{product.price}}</span><span class="info__field--price-rouble"> ₽</span>
@@ -17,7 +23,7 @@
     </li>
   </ul>
   <button
-    class="product__button-add-to-cart"
+    class="product__button-add-to-cart button-primary"
     (click)="this.buy.emit(this.product.id)"
     [disabled]="!product.isAvailable"
   >В корзину</button>

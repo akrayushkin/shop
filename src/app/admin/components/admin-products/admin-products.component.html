@@ -1,0 +1,67 @@
+<div class="admin-products">
+  <button class="admin-products__add-button button-primary" (click)="onAddProduct()">Добавить товар</button>
+  <table class="admin-products-table">
+    <thead>
+    <tr>
+      <th><span class="admin-products-table__column-name">#</span></th>
+      <th [class.admin-products-table__active-column]="sort.key==='name'">
+        <div class="admin-products-table__sort-option">
+          <span
+            class="admin-products-table__column-name admin-products-table__column-name--sort"
+            (click)="onToggleSort('name')"
+          >Название</span>
+          <label class="admin-products-table__sort-label">
+            <input class="admin-products-table__sort-input" type="checkbox" [(ngModel)]="sort.isAsc" (change)="onToggleSort('name')">
+            <span [class.admin-products-table__sort-label--active]="sort.isAsc">↑</span>
+            <span [class.admin-products-table__sort-label--active]="!sort.isAsc">↓</span>
+          </label>
+        </div>
+      </th>
+      <th [class.admin-products-table__active-column]="sort.key==='price'">
+        <div class="admin-products-table__sort-option">
+          <span
+            class="admin-products-table__column-name admin-products-table__column-name--sort"
+            (click)="onToggleSort('price')"
+          >Стоимость</span>
+          <label class="admin-products-table__sort-label">
+            <input class="admin-products-table__sort-input" type="checkbox" [(ngModel)]="sort.isAsc" (change)="onToggleSort('price')">
+            <span [class.admin-products-table__sort-label--active]="sort.isAsc">↑</span>
+            <span [class.admin-products-table__sort-label--active]="!sort.isAsc">↓</span>
+          </label>
+        </div>
+      </th>
+      <th [class.admin-products-table__active-column]="sort.key==='quantity'">
+        <div class="admin-products-table__sort-option">
+          <span
+            class="admin-products-table__column-name admin-products-table__column-name--sort"
+            (click)="onToggleSort('quantity')"
+          >Количество</span>
+          <label class="admin-products-table__sort-label">
+            <input class="admin-products-table__sort-input" type="checkbox" [(ngModel)]="sort.isAsc" (change)="onToggleSort('quantity')">
+            <span [class.admin-products-table__sort-label--active]="sort.isAsc">↑</span>
+            <span [class.admin-products-table__sort-label--active]="!sort.isAsc">↓</span>
+          </label>
+        </div>
+      </th>
+      <th><span class="admin-products-table__column-name">Действие</span></th>
+    </tr>
+    </thead>
+    <tbody>
+      <tr
+        class="admin-products-item"
+        appHighlight
+        *ngFor="let product of products$ | async | orderBy:sort.key:sort.isAsc;; let idx = index;"
+      >
+        <td class="text-center admin-products-item__id">{{ idx + 1 }}</td>
+        <td>{{ product.name | uppercase}}</td>
+        <td class="text-center admin-products-item__price">{{ product.price | currency:'RUB':'symbol-narrow'}}</td>
+        <td class="text-center admin-products-item__quantity">
+          <span class="admin-products-item__quantity-text">{{ product.quantity || 'unknown'}}</span>
+        </td>
+        <td class="text-center admin-products-item__action">
+          <a class="admin-products-item__button-remove" (click)="onEditProduct(this.product)">Редактировать</a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
