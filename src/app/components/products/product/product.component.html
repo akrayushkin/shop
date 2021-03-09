@@ -24,7 +24,7 @@
   </ul>
   <button
     class="product__button-add-to-cart button-primary"
-    (click)="this.buy.emit(this.product.id)"
+    (click)="buy.emit(product)"
     [disabled]="!product.isAvailable"
   >В корзину</button>
 </div>

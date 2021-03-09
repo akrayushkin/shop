@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { switchMap } from 'rxjs/operators';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, ParamMap } from '@angular/router';
+
+import { Subject } from 'rxjs';
+import { takeUntil, switchMap } from 'rxjs/operators';
 
 import { ProductModel } from 'src/app/models';
 import { CartService, ProductsService } from '../../../shared/services';
@@ -10,11 +12,11 @@ import { CartService, ProductsService } from '../../../shared/services';
   templateUrl: './product-view.component.html',
   styleUrls: ['./product-view.component.scss']
 })
-export class ProductViewComponent implements OnInit {
+export class ProductViewComponent implements OnInit, OnDestroy {
+  destroy$ = new Subject<void>();
   product: ProductModel;
 
   constructor(
-    private router: Router,
     public productsService: ProductsService,
     private activatedRoute: ActivatedRoute,
     private cartService: CartService
@@ -27,12 +29,31 @@ export class ProductViewComponent implements OnInit {
     };
     this.activatedRoute.paramMap
       .pipe(
-        switchMap((params: ParamMap) => this.productsService.getProductById(+params.get('productID')))
+        switchMap((params: ParamMap) => this.productsService.getProductById(+params.get('productID'))),
+        takeUntil(this.destroy$)
       )
       .subscribe(observer);
   }
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   onBuy(): void {
-    this.cartService.addProduct(this.product.id);
+    const observer = {
+      error: (err: any) => console.log(err)
+    };
+    const cartProduct = this.cartService.getCartProductById(this.product.id);
+    if (cartProduct) {
+      const increaseQuantityProduct = this.cartService.getIncreaseQuantityProduct(cartProduct);
+      this.cartService.updateProducts(increaseQuantityProduct)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(observer);
+    } else {
+      this.cartService.addProduct(this.product)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(observer);
+    }
   }
 }

@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
 
-import { CartService, ProductsService } from '../../../shared/services';
+import { ProductsService } from '../../../shared/services';
 
 import { ProductModel, Sort } from '../../../models';
 
@@ -12,7 +11,7 @@ import { ProductModel, Sort } from '../../../models';
   styleUrls: ['./admin-products.component.scss']
 })
 export class AdminProductsComponent implements OnInit {
-  products$: Observable<ProductModel[]>;
+  products: Promise<ProductModel[]>;
 
   sort: Sort = {
     key: 'name',
@@ -25,12 +24,19 @@ export class AdminProductsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.products$ = this.productsService.getProducts();
+    this.products = this.productsService.getProducts();
   }
 
   onEditProduct(product: ProductModel): void {
     const link = ['/admin/product/edit', product.id];
     this.router.navigate(link);
+  }
+
+  onDeleteProduct(product: ProductModel): void {
+    this.productsService
+      .deleteTask(product)
+      .then(() => (this.products = this.productsService.getProducts()))
+      .catch(err => console.log(err));
   }
 
   onAddProduct(): void {

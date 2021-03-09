@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router, Resolve, ActivatedRouteSnapshot } from '@angular/router';
 
 // rxjs
-import { Observable, of } from 'rxjs';
+import { Observable, of, from } from 'rxjs';
 import { map, catchError, take } from 'rxjs/operators';
 
 import { ProductModel } from '../../models';
@@ -28,7 +28,7 @@ export class ProductResolveGuard implements Resolve<ProductModel> {
 
     const id = +route.paramMap.get('productID');
 
-    return this.productsService.getProductById(id).pipe(
+    return from(this.productsService.getProductById(id)).pipe(
       map((product: ProductModel) => {
         if (product) {
           return product;

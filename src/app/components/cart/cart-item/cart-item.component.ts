@@ -12,7 +12,7 @@ import { ProductModel } from '../../../models';
 export class CartItemComponent {
   @Input() product: ProductModel;
   @Input() index: number;
-  @Output() remove = new EventEmitter<number>();
+  @Output() remove = new EventEmitter<ProductModel>();
   @Output() increase = new EventEmitter<number>();
   @Output() decrease = new EventEmitter<number>();
 }

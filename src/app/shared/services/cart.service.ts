@@ -1,98 +1,138 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject, OnDestroy } from '@angular/core';
+import {
+  HttpClient,
+  HttpHeaders,
+  HttpErrorResponse
+} from '@angular/common/http';
+
+import { Observable, Subject, throwError } from 'rxjs';
+import { catchError, retry, publish, refCount, concatMap, takeUntil } from 'rxjs/operators';
+
 import { ProductModel } from '../../models';
 import { LocalStorageKeys, LocalStorageService } from './local-storage.service';
-import { ProductsService } from './products.service';
+import { CartAPI } from '../../core/configs/cart.config';
 
 @Injectable({
   providedIn: 'root',
 })
-export class CartService {
+export class CartService implements OnDestroy {
   totalSum = 0;
   totalQuantity = 0;
+
   // tslint:disable-next-line: variable-name
-  private _cartProducts: ProductModel[] = [];
+  private cartProducts: ProductModel[] = [];
+  private destroy$ = new Subject<void>();
 
   constructor(
-    private productsService: ProductsService,
-    private localStorageService: LocalStorageService
+    private localStorageService: LocalStorageService,
+    private http: HttpClient,
+    @Inject(CartAPI) private cartUrl: string
   ) {
     this.init();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   get isEmptyCart(): boolean {
     return !this.cartProducts.length;
   }
 
-  get cartProducts(): ProductModel[] {
-    return this._cartProducts;
+  fetchAllProducts(): Observable<ProductModel[]> {
+    return this.http.get<ProductModel[]>(this.cartUrl).pipe(
+      retry(3),
+      publish(),
+      refCount(),
+      catchError(this.handleError)
+    );
   }
 
-  addProduct(id: number): void {
-    if (!this.isProductInCart(id)) {
-      this.productsService.getProductById(id)
-        .subscribe(product => {
-          this._cartProducts = [...this.cartProducts, {...product, quantity: 1}];
-        });
-    } else {
-      this.increaseQuantity(id);
-    }
-    this.updateCartData();
+  getCartProductById(id: number): ProductModel {
+    return this.cartProducts.find((item) => item.id === id);
   }
 
-  increaseQuantity(id: number): void {
-    this.changeQuantity(id, 1);
+  addProduct(product: ProductModel): Observable<ProductModel>{
+    const url = this.cartUrl;
+    const body = JSON.stringify({...product, quantity: 1});
+    const options = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+    };
+    return this.http
+      .post<ProductModel>(url, body, options)
+      .pipe(
+        catchError(this.handleError)
+      );
+}
+
+  updateProducts(product: ProductModel): Observable<ProductModel> {
+    const url = `${this.cartUrl}/${product.id}`;
+    const body = JSON.stringify(product);
+    const options = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+    };
+    return this.http
+          .put<ProductModel>(url, body, options)
+          .pipe(
+            catchError(this.handleError),
+          );
   }
 
-  decreaseQuantity(id: number): void  {
-    const target = this.cartProducts.find((item) => item.id === id);
-    if (target.quantity === 1) {
-      this.removeProduct(id);
-    } else {
-      this.changeQuantity(id, -1);
-    }
+  removeProduct(product: ProductModel): Observable<ProductModel[]> {
+    const url = `${this.cartUrl}/${product.id}`;
+    return this.http.delete(url)
+            .pipe(
+              concatMap(() => this.fetchAllProducts()),
+              catchError(this.handleError),
+            );
   }
 
-  removeProduct(id: number): void {
-    this._cartProducts = this.cartProducts.filter((item) => item.id !== id);
-    this.updateCartData();
+  getIncreaseQuantityProduct(product: ProductModel): ProductModel {
+    return this.changeQuantity(product, 1);
+  }
+
+  getDecreaseQuantityProduct(product: ProductModel): ProductModel  {
+    return this.changeQuantity(product, -1);
   }
 
   removeAllProducts(): void {
-    this._cartProducts = [];
-    this.updateCartData();
+    const observer = {
+      error: (err: any) => console.log(err)
+    };
+    this.cartProducts.forEach(item => {
+      this.removeProduct(item)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(observer);
+    });
   }
 
   private init(): void {
-    this._cartProducts =
-      JSON.parse(this.localStorageService.get(LocalStorageKeys.cart)) || [];
-    this.updateTotalValues();
+    const observer = {
+      next: (cartProducts) => {
+        this.cartProducts = cartProducts;
+        this.updateTotalValues();
+      },
+      error: (err: any) => console.log(err)
+    };
+    this.fetchAllProducts()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(observer);
+    /*  this.cartProducts =
+      JSON.parse(this.localStorageService.get(LocalStorageKeys.cart)) || []; */
   }
 
-  private isProductInCart(id: number): boolean {
-    return this.cartProducts.some((item) => item.id === id);
-  }
-
-  private changeQuantity(id: number, diffQuantity: number): void {
-    this.productsService.getProductById(id)
-      .subscribe(product => {
-        this._cartProducts = this.cartProducts.map((item) => {
-          return item.id === id
-            ? {
-                ...item,
-                quantity: item.quantity + diffQuantity,
-                price: product.price * (item.quantity + diffQuantity),
-              }
-            : {
-              ...item,
-            };
-        });
-        this.updateCartData();
-      });
+  private changeQuantity(product: ProductModel, diffQuantity: number): ProductModel {
+    return {
+      ...product,
+      quantity: product.quantity + diffQuantity,
+      price: product.price / product.quantity * (product.quantity + diffQuantity),
+    };
   }
 
   private updateCartData(): void {
     this.updateTotalValues();
-    this.localStorageService.set(LocalStorageKeys.cart, JSON.stringify(this.cartProducts));
+    //this.localStorageService.set(LocalStorageKeys.cart, JSON.stringify(this.cartProducts));
   }
 
   private updateTotalValues(): void {
@@ -104,5 +144,17 @@ export class CartService {
       (sum, current) => sum + current.quantity,
       0
     );
+  }
+
+  private handleError(err: HttpErrorResponse): Observable<never> {
+    // A client-side or network error occurred.
+    if (err.error instanceof Error) {
+      console.error('An error occurred:', err.error.message);
+    } else {
+      // The backend returned an unsuccessful response code.
+      // The response body may contain clues as to what went wrong,
+      console.error(`Backend returned code ${err.status}, body was: ${err.error}`);
+    }
+    return throwError('Something bad happened; please try again later.');
   }
 }

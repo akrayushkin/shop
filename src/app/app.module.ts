@@ -1,6 +1,7 @@
 import { DEFAULT_CURRENCY_CODE, LOCALE_ID, NgModule } from '@angular/core';
 import { Router } from '@angular/router';
 import { registerLocaleData } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 import localeRu from '@angular/common/locales/ru';
 import { BrowserModule } from '@angular/platform-browser';
 
@@ -9,6 +10,7 @@ import { SharedModule } from './shared/shared.module';
 import { LayoutModule } from './layout/layout.module';
 import { ProductsModule } from './components/products/products.module';
 import { CartModule } from './components/cart/cart.module';
+import { httpInterceptorProviders } from './core/interceptors';
 
 import { AppComponent } from './app.component';
 import { FirstComponent, HeaderMenuComponent } from './components';
@@ -23,6 +25,8 @@ registerLocaleData(localeRu, 'ru');
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
+
     ProductsModule,
     CartModule,
     SharedModule,
@@ -31,6 +35,7 @@ registerLocaleData(localeRu, 'ru');
     AppRoutingModule
   ],
   providers: [
+    httpInterceptorProviders,
     { provide: DEFAULT_CURRENCY_CODE, useValue: 'RUB' },
     { provide: LOCALE_ID, useValue: 'ru' }
   ],

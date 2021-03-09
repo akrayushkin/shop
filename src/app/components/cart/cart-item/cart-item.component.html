@@ -3,11 +3,11 @@
   <td>{{ product.name | uppercase}}</td>
   <td class="text-center cart-item__price">{{ product.price | currency:'RUB':'symbol-narrow'}}</td>
   <td class="text-center cart-item__quantity">
-    <button class="cart-item__quantity-button cart-item__quantity-button--decrease" (click)="this.decrease.emit(this.product.id)"></button>
+    <button class="cart-item__quantity-button cart-item__quantity-button--decrease" (click)="this.decrease.emit(product.id)"></button>
     <span class="cart-item__quantity-text">{{ product.quantity }}</span>
-    <button class="cart-item__quantity-button cart-item__quantity-button--increase"(click)="this.increase.emit(this.product.id)"></button>
+    <button class="cart-item__quantity-button cart-item__quantity-button--increase"(click)="this.increase.emit(product.id)"></button>
   </td>
   <td class="text-center cart-item__action">
-    <a class="cart-item__button-remove" (click)="this.remove.emit(this.product.id)">Удалить</a>
+    <a class="cart-item__button-remove" (click)="this.remove.emit(product)">Удалить</a>
   </td>
 </ng-container>

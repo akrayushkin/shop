@@ -10,7 +10,7 @@ import { ProductModel } from '../../../models';
 })
 export class ProductComponent {
   @Input() product: ProductModel;
-  @Output() buy = new EventEmitter<number>();
+  @Output() buy = new EventEmitter<ProductModel>();
   @Output() viewProduct = new EventEmitter<ProductModel>();
 
   onViewProduct(): void {

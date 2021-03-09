@@ -1,5 +1,23 @@
 Deploy: https://akrayushkin-angular-shop.netlify.app/
 
+**0.1.6 (2020.03.08)**
+FEATURES:
+
+- added json-server;
+- create TimingInterceptor;
+- create AppSettingsService;
+- added Dark Theme
+
+REFACTORING:
+
+- changed ProductsService (added HttpClient, the methods are implemented according to the Promise scheme);
+- changed CartService (added HttpClient, the methods are implemented using the Observable scheme);
+
+BUGS:
+
+- CartService используется в нескольких компонентах: CartListComponent, HeaderMenuComponent, ProductListComponent, ProductViewComponent и OrdersGuard, поэтому, логично использовать едииный state для корзины. В качаестве state, была создана переменная cartProducts внутри CartService. При создании сервиса создается подписка на метод получения всех продуктов корзины fetchAllProducts, внутри подписки идет присвоение респонса, переменной cartProducts, но присвоение происходит единожды. Т.е. изменения, которые происходят с помощью других методов CartService в базе данных на серевере, можно увидеть только после перезагрузки страницы. Пока не разобрался с проблемой, планирую решить при переводе работы приложения на NgRx.
+- Не смог реализовать метод очистки корзины. Созданный метод removeAllProducts, для удаления всех записей на сервере, работает не правильно.
+
 **0.1.5 (2020.03.01)**
 FEATURES:
 - create ProductsRoutingModule;

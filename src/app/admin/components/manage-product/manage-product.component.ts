@@ -58,12 +58,10 @@ export class ManageProductComponent implements OnInit, CanComponentDeactivate  {
   onSaveProduct(): void {
     const product = { ...this.product };
 
-    if (product.id) {
-      this.productsService.updateProduct(product);
-    } else {
-      this.productsService.createProduct({...product, id: Date.now(), isAvailable: true});
-    }
-    this.onGoBack();
+    const method = product.id ? 'updateProduct' : 'createProduct';
+    this.productsService[method](product)
+      .then(() => this.onGoBack())
+      .catch(err => console.log(err));
   }
 
   onGoBack(): void {

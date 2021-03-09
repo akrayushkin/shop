@@ -18,9 +18,21 @@
       }
     }
 
-    &__button-remove {
+    &__button {
+      border: none;
+      outline: none;
+      background-color: transparent;
       color:indianred;
+      font-weight: bold;
       cursor: pointer;
+
+      &:hover {
+        transform: scale(1.1);
+      }
+
+      &:not(:last-child) {
+        margin-right: 20px;
+      }
     }
 
     &--total{

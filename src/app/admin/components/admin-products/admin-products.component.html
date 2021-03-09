@@ -50,16 +50,17 @@
       <tr
         class="admin-products-item"
         appHighlight
-        *ngFor="let product of products$ | async | orderBy:sort.key:sort.isAsc;; let idx = index;"
+        *ngFor="let product of products | async | orderBy:sort.key:sort.isAsc;; let idx = index;"
       >
         <td class="text-center admin-products-item__id">{{ idx + 1 }}</td>
-        <td>{{ product.name | uppercase}}</td>
-        <td class="text-center admin-products-item__price">{{ product.price | currency:'RUB':'symbol-narrow'}}</td>
+        <td>{{ product.name | uppercase }}</td>
+        <td class="text-center admin-products-item__price">{{ product.price | currency:'RUB':'symbol-narrow' }}</td>
         <td class="text-center admin-products-item__quantity">
-          <span class="admin-products-item__quantity-text">{{ product.quantity || 'unknown'}}</span>
+          <span class="admin-products-item__quantity-text">{{ product.quantity || 'unknown' }}</span>
         </td>
         <td class="text-center admin-products-item__action">
-          <a class="admin-products-item__button-remove" (click)="onEditProduct(this.product)">Редактировать</a>
+          <button class="admin-products-item__button" (click)="onEditProduct(this.product)">Редактировать</button>
+          <button class="admin-products-item__button" (click)="onDeleteProduct(this.product)">Удалить</button>
         </td>
       </tr>
     </tbody>

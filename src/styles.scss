@@ -6,6 +6,10 @@ html, body {
   color: $dark-color;
   margin: 0;
 }
+body.dark-theme {
+  color: $light-color;
+  background-color: $dark-color;
+}
 
 *,
 *:before,
@@ -55,6 +59,10 @@ html, body {
   text-decoration: none;
   cursor: pointer;
   transition: color .1s ease;
+}
+
+.dark-theme .link {
+  color: $light-color;
 }
 
 .nav {
