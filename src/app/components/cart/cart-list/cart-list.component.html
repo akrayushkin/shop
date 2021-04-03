@@ -1,4 +1,4 @@
-<div *ngIf="!cartService.isEmptyCart; else emptyCart">
+<div *ngIf="isNotEmptyCart$ | async; else emptyCart">
   <table class="cart-table">
     <thead>
     <tr>
@@ -49,20 +49,20 @@
       <tr
         class="cart-item"
         appHighlight
-        *ngFor="let product of cartService.cartProducts | orderBy:sort.key:sort.isAsc; let idx = index;"
+        *ngFor="let product of cartProducts$ | async | orderBy:sort.key:sort.isAsc; let idx = index;"
         app-cart-item
         [product]="product"
         [index]="idx"
         (remove)="onRemove($event)"
-        (increase)="onIncreaseQuantity($event)"
-        (decrease)="onDecreaseQuantity($event)">
+        (increase)="onIncreaseQuantity(product)"
+        (decrease)="onDecreaseQuantity(product)">
       ></tr>
       <tr class="cart-item cart-item--total">
         <td></td>
         <td>Всего</td>
-        <td class="text-center cart-item__price">{{cartService.totalSum | currency:'RUB':'symbol-narrow'}}</td>
+        <td class="text-center cart-item__price">{{cartTotalSum$ | async | currency:'RUB':'symbol-narrow'}}</td>
         <td class="text-center cart-item__quantity">
-          <span class="cart-item__quantity-text">{{cartService.totalQuantity}}</span>
+          <span class="cart-item__quantity-text">{{cartTotalQuantity$ | async}}</span>
         </td>
         <td class="text-center cart-item__action">
           <a class="cart-item__button-remove" (click)="onClear()">Очистить</a>

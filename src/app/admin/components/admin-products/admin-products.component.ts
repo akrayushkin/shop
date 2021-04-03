@@ -1,7 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 
-import { ProductsService } from '../../../shared/services';
+import { Observable } from 'rxjs';
+
+// @NgRx
+import { Store } from '@ngrx/store';
+import { selectProductsData, selectProductsError } from './../../../core/@ngrx';
+import * as ProductsActions from './../../../core/@ngrx/products/products.actions';
+import * as RouterActions from './../../../core/@ngrx/router/router.actions';
 
 import { ProductModel, Sort } from '../../../models';
 
@@ -11,7 +16,9 @@ import { ProductModel, Sort } from '../../../models';
   styleUrls: ['./admin-products.component.scss']
 })
 export class AdminProductsComponent implements OnInit {
-  products: Promise<ProductModel[]>;
+  products$: Observable<ReadonlyArray<ProductModel>>;
+  productsError$: Observable<Error | string>;
+
 
   sort: Sort = {
     key: 'name',
@@ -19,29 +26,32 @@ export class AdminProductsComponent implements OnInit {
   };
 
   constructor(
-    private router: Router,
-    public productsService: ProductsService,
+    private store: Store
   ) { }
 
   ngOnInit(): void {
-    this.products = this.productsService.getProducts();
+    this.store.dispatch(ProductsActions.getProductsAdmin());
+    this.products$ = this.store.select(selectProductsData);
+    this.productsError$ = this.store.select(selectProductsError);
   }
 
   onEditProduct(product: ProductModel): void {
     const link = ['/admin/product/edit', product.id];
-    this.router.navigate(link);
+    this.store.dispatch(RouterActions.go({
+      path: link
+    }));
   }
 
   onDeleteProduct(product: ProductModel): void {
-    this.productsService
-      .deleteTask(product)
-      .then(() => (this.products = this.productsService.getProducts()))
-      .catch(err => console.log(err));
+    const productToDelete: ProductModel = { ...product };
+    this.store.dispatch(ProductsActions.deleteProduct({ product: productToDelete }));
   }
 
   onAddProduct(): void {
     const link = ['/admin/product/add'];
-    this.router.navigate(link);
+    this.store.dispatch(RouterActions.go({
+      path: link
+    }));
   }
 
   onToggleSort(key: string): void {

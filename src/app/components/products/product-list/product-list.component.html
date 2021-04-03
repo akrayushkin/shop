@@ -1,9 +1,10 @@
 <div class="product-list">
+  <p *ngIf="(productsError$ | async) as value">{{value}}</p>
   <app-product
     class="product__item"
-    *ngFor="let product of products | async"
+    *ngFor="let product of (products$ | async)"
     [product]="product"
-    (buy)="onBuy($event)"
+    (buy)="onBuy(product)"
     (viewProduct)="onViewProduct($event)"
   ></app-product>
 </div>

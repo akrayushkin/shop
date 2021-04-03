@@ -1,48 +1,49 @@
 import { Injectable } from '@angular/core';
-import { Router, Resolve, ActivatedRouteSnapshot } from '@angular/router';
+import { Resolve } from '@angular/router';
+import { Store } from '@ngrx/store';
 
 // rxjs
-import { Observable, of, from } from 'rxjs';
-import { map, catchError, take } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { map, catchError, take, tap, delay } from 'rxjs/operators';
+import { selectSelectedProductByUrl } from '../@ngrx';
+import * as ProductsActions from '../@ngrx/products/products.actions'
+import * as RouterActions from '../../core/@ngrx/router/router.actions';
 
 import { ProductModel } from '../../models';
-import { ProductsService } from '../../shared/services';
 
-import { productEmptyMock } from '../../mocks/products.mock';
 
 @Injectable({
   providedIn: 'any'
 })
 export class ProductResolveGuard implements Resolve<ProductModel> {
   constructor(
-    private productsService: ProductsService,
-    private router: Router
+    private store: Store
   ) {}
 
-  resolve(route: ActivatedRouteSnapshot): Observable<ProductModel | null> {
+  resolve(): Observable<ProductModel | null> {
     console.log('ProductResolve Guard is called');
 
-    if (!route.paramMap.has('productID')) {
-      return of(productEmptyMock);
-    }
-
-    const id = +route.paramMap.get('productID');
-
-    return from(this.productsService.getProductById(id)).pipe(
+    return this.store.select(selectSelectedProductByUrl).pipe(
+      tap(product => this.store.dispatch(ProductsActions.setOriginalProduct({ product }))),
+      delay(500),
       map((product: ProductModel) => {
         if (product) {
           return product;
         } else {
-          this.router.navigate(['/admin/products']);
+          this.store.dispatch(RouterActions.go({
+            path: ['/admin/products']
+          }));
           return null;
         }
       }),
       take(1),
       catchError(() => {
-        this.router.navigate(['/admin/products']);
+        this.store.dispatch(RouterActions.go({
+          path: ['/admin/products']
+        }));
         // catchError MUST return observable
         return of(null);
-      })
+      }),
     );
   }
 }

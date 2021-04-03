@@ -50,7 +50,7 @@
       <tr
         class="admin-products-item"
         appHighlight
-        *ngFor="let product of products | async | orderBy:sort.key:sort.isAsc;; let idx = index;"
+        *ngFor="let product of (products$ | async) | orderBy:sort.key:sort.isAsc; let idx = index;"
       >
         <td class="text-center admin-products-item__id">{{ idx + 1 }}</td>
         <td>{{ product.name | uppercase }}</td>

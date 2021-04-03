@@ -4,6 +4,7 @@ import {
   OnInit,
   Optional,
 } from '@angular/core';
+import { Store } from '@ngrx/store';
 import {
   ConfigOptionsService,
   ConstantsService,
@@ -16,6 +17,8 @@ import {
   сonstantsInstance,
 } from 'src/app/shared/services';
 import { ConfigModel } from '../../models';
+
+import * as CartActions from '../../core/@ngrx/cart/cart.actions';
 
 const initConfigOptions: ConfigModel = {
   login: 'akrayushkin',
@@ -43,6 +46,7 @@ export class FirstComponent implements OnInit {
   value: boolean = true;
 
   constructor(
+    private store: Store,
     @Optional() private generatorService: GeneratorService,
     @Optional() private configOptionsService: ConfigOptionsService,
     @Optional() private constantsService: ConstantsService,
@@ -51,6 +55,7 @@ export class FirstComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.store.dispatch(CartActions.getCartProducts());
     this.id = this.configOptionsService.setConfigOptions(initConfigOptions);
     this.name = this.configOptionsService.getConfigOptionsById(this.id).name;
     console.log(

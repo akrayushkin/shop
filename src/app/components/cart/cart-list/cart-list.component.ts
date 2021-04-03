@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 
-import { Observable, Subject } from 'rxjs';
+import { Observable } from 'rxjs';
+
+import { Store } from '@ngrx/store';
+import * as CartActions from '../../../core/@ngrx/cart/cart.actions';
+import { selectCartProducts, selectCartError, selectCartTotalSum, selectCartTotalQuantity, selectIsNotEmptyCart } from '../../../core/@ngrx';
 
 import { CartService } from '../../../shared/services/cart.service';
 import { ProductModel, Sort } from 'src/app/models';
-import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-cart-list',
@@ -12,54 +15,45 @@ import { takeUntil } from 'rxjs/operators';
   styleUrls: ['./cart-list.component.scss']
 })
 export class CartListComponent implements OnInit {
+  cartProducts$: Observable<ProductModel[]>;
+  cartProductsError$: Observable<Error | string>;
+  cartTotalSum$: Observable<number>;
+  cartTotalQuantity$: Observable<number>;
+  isNotEmptyCart$: Observable<boolean>;
   sort: Sort = {
     key: 'name',
     isAsc: true
   };
 
-  private destroy$ = new Subject<void>();
+  constructor(
+    public cartService: CartService,
+    private store: Store
+  ) { }
 
-  constructor(public cartService: CartService) { }
-
-  ngOnInit(): void {}
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
+  ngOnInit(): void {
+    this.cartProducts$ = this.store.select(selectCartProducts);
+    this.cartProductsError$ = this.store.select(selectCartError);
+    this.cartTotalSum$ = this.store.select(selectCartTotalSum);
+    this.cartTotalQuantity$ = this.store.select(selectCartTotalQuantity);
+    this.isNotEmptyCart$ = this.store.select(selectIsNotEmptyCart);
   }
 
   onRemove(product: ProductModel): void {
-    const observer = {
-      error: (err: any) => console.log(err)
-    };
-    this.cartService.removeProduct(product)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(observer);
+    const productToRemove: ProductModel = { ...product };
+    this.store.dispatch(CartActions.deleteCartProduct({ product: productToRemove }));
   }
 
-  onIncreaseQuantity(id: number): void {
-    const observer = {
-      error: (err: any) => console.log(err)
-    };
-    const cartProduct = this.cartService.getCartProductById(id);
-    const increaseQuantityProduct = this.cartService.getIncreaseQuantityProduct(cartProduct);
-    this.cartService.updateProducts(increaseQuantityProduct)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(observer);
+  onIncreaseQuantity(product: ProductModel): void {
+    const сhangedProduct = this.cartService.getIncreaseQuantityProduct(product);
+    this.store.dispatch(CartActions.updateCartProduct({product: сhangedProduct}));
   }
 
-  onDecreaseQuantity(id: number): void {
-    const observer = {
-      error: (err: any) => console.log(err)
-    };
-    const cartProduct = this.cartService.getCartProductById(id);
-    const increaseQuantityProduct = this.cartService.getDecreaseQuantityProduct(cartProduct);
-    if (increaseQuantityProduct.quantity) {
-      this.cartService.updateProducts(increaseQuantityProduct)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe(observer);
+  onDecreaseQuantity(product: ProductModel): void {
+    const сhangedProduct = this.cartService.getDecreaseQuantityProduct(product);
+    if (сhangedProduct.quantity) {
+      this.store.dispatch(CartActions.updateCartProduct({product: сhangedProduct}));
     } else {
-      this.onRemove(increaseQuantityProduct);
+      this.onRemove(сhangedProduct);
     }
   }
 

@@ -1,40 +1,26 @@
-import { Injectable, Inject, OnDestroy } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import {
   HttpClient,
   HttpHeaders,
   HttpErrorResponse
 } from '@angular/common/http';
 
-import { Observable, Subject, throwError } from 'rxjs';
-import { catchError, retry, publish, refCount, concatMap, takeUntil } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
+import { catchError, retry, publish, refCount, concatMap } from 'rxjs/operators';
 
 import { ProductModel } from '../../models';
-import { LocalStorageKeys, LocalStorageService } from './local-storage.service';
 import { CartAPI } from '../../core/configs/cart.config';
 
 @Injectable({
   providedIn: 'root',
 })
-export class CartService implements OnDestroy {
-  totalSum = 0;
-  totalQuantity = 0;
-
-  // tslint:disable-next-line: variable-name
+export class CartService {
   private cartProducts: ProductModel[] = [];
-  private destroy$ = new Subject<void>();
 
   constructor(
-    private localStorageService: LocalStorageService,
     private http: HttpClient,
     @Inject(CartAPI) private cartUrl: string
-  ) {
-    this.init();
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
+  ) {}
 
   get isEmptyCart(): boolean {
     return !this.cartProducts.length;
@@ -64,9 +50,9 @@ export class CartService implements OnDestroy {
       .pipe(
         catchError(this.handleError)
       );
-}
+  }
 
-  updateProducts(product: ProductModel): Observable<ProductModel> {
+  updateProduct(product: ProductModel): Observable<ProductModel> {
     const url = `${this.cartUrl}/${product.id}`;
     const body = JSON.stringify(product);
     const options = {
@@ -97,29 +83,7 @@ export class CartService implements OnDestroy {
   }
 
   removeAllProducts(): void {
-    const observer = {
-      error: (err: any) => console.log(err)
-    };
-    this.cartProducts.forEach(item => {
-      this.removeProduct(item)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe(observer);
-    });
-  }
 
-  private init(): void {
-    const observer = {
-      next: (cartProducts) => {
-        this.cartProducts = cartProducts;
-        this.updateTotalValues();
-      },
-      error: (err: any) => console.log(err)
-    };
-    this.fetchAllProducts()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(observer);
-    /*  this.cartProducts =
-      JSON.parse(this.localStorageService.get(LocalStorageKeys.cart)) || []; */
   }
 
   private changeQuantity(product: ProductModel, diffQuantity: number): ProductModel {
@@ -128,22 +92,6 @@ export class CartService implements OnDestroy {
       quantity: product.quantity + diffQuantity,
       price: product.price / product.quantity * (product.quantity + diffQuantity),
     };
-  }
-
-  private updateCartData(): void {
-    this.updateTotalValues();
-    //this.localStorageService.set(LocalStorageKeys.cart, JSON.stringify(this.cartProducts));
-  }
-
-  private updateTotalValues(): void {
-    this.totalSum = this.cartProducts.reduce(
-      (sum, current) => sum + current.price,
-      0
-    );
-    this.totalQuantity = this.cartProducts.reduce(
-      (sum, current) => sum + current.quantity,
-      0
-    );
   }
 
   private handleError(err: HttpErrorResponse): Observable<never> {

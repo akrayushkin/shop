@@ -10,7 +10,10 @@ export class OrderByPipe implements PipeTransform {
     key: string,
     isAsc: boolean = false
   ): Record<string, any>[] {
-    return value?.sort(this.byField(key, isAsc));
+    if (value && value.length > 1) {
+      return value.slice().sort(this.byField(key, isAsc));
+    }
+    return value;
   }
 
   byField(field: string, isAsc: boolean): (

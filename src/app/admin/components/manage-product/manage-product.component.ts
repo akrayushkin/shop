@@ -1,36 +1,54 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { UrlTree } from '@angular/router';
 
-import { ActivatedRoute, Router, UrlTree } from '@angular/router';
-import { CanComponentDeactivate } from './../../../core';
-import { DialogService } from '../../../shared/services';
+// @NgRx
+import { Store } from '@ngrx/store';
+import { selectSelectedProductByUrl, selectOriginalProduct } from './../../../core/@ngrx';
+import * as ProductsActions from './../../../core/@ngrx/products/products.actions';
+import * as RouterActions from './../../../core/@ngrx/router/router.actions';
 
 // rxjs
-import { Observable } from 'rxjs';
-import { pluck } from 'rxjs/operators';
+import { Observable, of, Subject } from 'rxjs';
+import { switchMap, takeUntil } from 'rxjs/operators';
 
+import { CanComponentDeactivate } from './../../../core';
+import { DialogService } from '../../../shared/services';
 import { ProductModel } from '../../../models';
-import { ProductsService } from './../../../shared/services/products.service';
 
 @Component({
   templateUrl: './manage-product.component.html',
   styleUrls: ['./manage-product.component.scss']
 })
-export class ManageProductComponent implements OnInit, CanComponentDeactivate  {
+export class ManageProductComponent implements OnInit, CanComponentDeactivate, OnDestroy  {
+  destroy$: Subject<void>  = new Subject<void>();
   product: ProductModel;
-  originalProduct: ProductModel;
 
   constructor(
-    private productsService: ProductsService,
-    private router: Router,
-    private route: ActivatedRoute,
-    private dialogService: DialogService
+    private dialogService: DialogService,
+    private store: Store
   ) {}
 
   ngOnInit(): void {
-    this.route.data.pipe(pluck('product')).subscribe((product: ProductModel) => {
-      this.product = { ...product };
-      this.originalProduct = { ...product };
-    });
+    const observer: any = {
+      next: (product: ProductModel) => {
+        this.product = {...product};
+      },
+      error(err) {
+        console.log(err);
+      },
+      complete() {
+        console.log('Stream is completed');
+      }
+    };
+
+    this.store.select(selectSelectedProductByUrl)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe(observer);
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   canDeactivate():
@@ -38,33 +56,40 @@ export class ManageProductComponent implements OnInit, CanComponentDeactivate  {
     | Promise<boolean | UrlTree>
     | boolean
     | UrlTree {
-    const flags = Object.keys(this.originalProduct).map(key => {
-      if (this.originalProduct[key] === this.product[key]) {
-        return true;
-      }
-      return false;
-    });
+    const flags = [];
 
-    if (flags.every(el => el)) {
-      return true;
-    }
+    return this.store.select(selectOriginalProduct).pipe(
+      switchMap((originalProduct: ProductModel) => {
+        for (const key in originalProduct) {
+          if (originalProduct[key] === this.product[key]) {
+            flags.push(true);
+          } else {
+            flags.push(false);
+          }
+        }
 
-    // Otherwise ask the user with the dialog service and return its
-    // promise which resolves to true or false when the user decides
-    return this.dialogService.confirm('Discard changes?');
+        if (flags.every(el => el)) {
+          return of(true);
+        }
+
+        // Otherwise ask the user with the dialog service and return its
+        // promise which resolves to true or false when the user decides
+        return this.dialogService.confirm('Discard changes?');
+      })
+    );
   }
 
-
   onSaveProduct(): void {
-    const product = { ...this.product };
+    const product = { ...this.product } as ProductModel;
 
-    const method = product.id ? 'updateProduct' : 'createProduct';
-    this.productsService[method](product)
-      .then(() => this.onGoBack())
-      .catch(err => console.log(err));
+    if (product.id) {
+      this.store.dispatch(ProductsActions.updateProduct({ product }));
+    } else {
+      this.store.dispatch(ProductsActions.createProduct({ product }));
+    }
   }
 
   onGoBack(): void {
-    this.router.navigate(['/admin/products']);
+    this.store.dispatch(RouterActions.back());
   }
 }

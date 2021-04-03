@@ -1,11 +1,15 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, ParamMap } from '@angular/router';
 
 import { Subject } from 'rxjs';
-import { takeUntil, switchMap } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 
 import { ProductModel } from 'src/app/models';
 import { CartService, ProductsService } from '../../../shared/services';
+import * as CartActions from '../../../core/@ngrx/cart/cart.actions';
+
+// @NgRx
+import { Store } from '@ngrx/store';
+import { selectSelectedProductByUrl, selectCartProductByID } from './../../../core/@ngrx';
 
 @Component({
   selector: 'app-product-view',
@@ -13,26 +17,31 @@ import { CartService, ProductsService } from '../../../shared/services';
   styleUrls: ['./product-view.component.scss']
 })
 export class ProductViewComponent implements OnInit, OnDestroy {
-  destroy$ = new Subject<void>();
+  destroy$: Subject<void>  = new Subject<void>();
   product: ProductModel;
 
   constructor(
     public productsService: ProductsService,
-    private activatedRoute: ActivatedRoute,
+    private store: Store,
     private cartService: CartService
   ) { }
 
   ngOnInit(): void {
-    const observer = {
-      next: (product: ProductModel) => (this.product = { ...product }),
-      error: (err: any) => console.log(err)
+    const observer: any = {
+      next: (product: ProductModel) => {
+        this.product = {...product};
+      },
+      error(err) {
+        console.log(err);
+      },
+      complete() {
+        console.log('Stream is completed');
+      }
     };
-    this.activatedRoute.paramMap
-      .pipe(
-        switchMap((params: ParamMap) => this.productsService.getProductById(+params.get('productID'))),
-        takeUntil(this.destroy$)
-      )
-      .subscribe(observer);
+
+    this.store.select(selectSelectedProductByUrl)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe(observer);
   }
 
   ngOnDestroy(): void {
@@ -41,19 +50,18 @@ export class ProductViewComponent implements OnInit, OnDestroy {
   }
 
   onBuy(): void {
-    const observer = {
-      error: (err: any) => console.log(err)
-    };
-    const cartProduct = this.cartService.getCartProductById(this.product.id);
-    if (cartProduct) {
-      const increaseQuantityProduct = this.cartService.getIncreaseQuantityProduct(cartProduct);
-      this.cartService.updateProducts(increaseQuantityProduct)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe(observer);
-    } else {
-      this.cartService.addProduct(this.product)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe(observer);
-    }
+    this.store.select(selectCartProductByID, {id: this.product.id})
+      .pipe(
+        take(1),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(cartProduct => {
+        if (cartProduct) {
+          const сhangedProduct = this.cartService.getIncreaseQuantityProduct(cartProduct);
+          this.store.dispatch(CartActions.updateCartProduct({product: сhangedProduct}));
+        } else {
+          this.store.dispatch(CartActions.addCartProduct({product: this.product}));
+        }
+    })
   }
 }

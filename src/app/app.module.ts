@@ -10,6 +10,7 @@ import { SharedModule } from './shared/shared.module';
 import { LayoutModule } from './layout/layout.module';
 import { ProductsModule } from './components/products/products.module';
 import { CartModule } from './components/cart/cart.module';
+import { RootStoreModule } from './core/@ngrx/root-store.module';
 import { httpInterceptorProviders } from './core/interceptors';
 
 import { AppComponent } from './app.component';
@@ -26,13 +27,13 @@ registerLocaleData(localeRu, 'ru');
   imports: [
     BrowserModule,
     HttpClientModule,
-
     ProductsModule,
     CartModule,
     SharedModule,
     LayoutModule,
+    RootStoreModule,
     // MUST BE LAST
-    AppRoutingModule
+    AppRoutingModule,
   ],
   providers: [
     httpInterceptorProviders,

@@ -58,7 +58,7 @@ export class ProductsService {
       .catch(this.handleError);
   }
 
-  deleteTask(product: ProductModel): Promise<ProductModel> {
+  deleteProduct(product: ProductModel): Promise<ProductModel> {
     const url = `${this.productsUrl}/${product.id}`;
 
     return (

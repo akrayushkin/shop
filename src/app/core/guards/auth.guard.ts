@@ -1,11 +1,15 @@
 import { Injectable } from '@angular/core';
 import {
-  CanActivate, CanActivateChild, CanLoad, Router, Route,
+  CanActivate, CanActivateChild, CanLoad, Route,
   ActivatedRouteSnapshot, RouterStateSnapshot, NavigationExtras, UrlTree, UrlSegment
 } from '@angular/router';
 
+// @Ngrx
+import { Store } from '@ngrx/store';
+import * as RouterActions from '../@ngrx/router/router.actions';
+
 import { Observable } from 'rxjs';
-import { AuthService, UserRoles } from './../../shared/services';
+import { AuthService, UserRoles } from '../../shared/services';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +17,7 @@ import { AuthService, UserRoles } from './../../shared/services';
 export class AuthGuard implements CanActivate, CanActivateChild, CanLoad  {
   constructor(
     private authService: AuthService,
-    private router: Router
+    private store: Store
   ) {}
 
   canActivate(
@@ -44,6 +48,9 @@ export class AuthGuard implements CanActivate, CanActivateChild, CanLoad  {
     this.authService.redirectUrl = url;
 
     // Navigate to the login page, return UrlTree
-    return this.router.parseUrl('/login');
+    this.store.dispatch(RouterActions.go({
+      path: ['/login']
+    }));
+    return false;
   }
 }

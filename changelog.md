@@ -1,6 +1,20 @@
-Deploy: https://akrayushkin-angular-shop.netlify.app/
+**0.1.7 (2021.04.04)**
+FEATURES:
 
-**0.1.6 (2020.03.08)**
+- added to the project @ngrx / store, @ngrx/effect, @ngrx/router-store
+- added products state, products actions, products selectors, products reducer, products effects
+- added cart state, cart actions, cart selectors, cart reducer, cart effects
+- implemented navigation using the 'Go', 'Go Home', 'Forward', 'BACK'
+- combined selector implemented to obtain data by parameter from URL GetProductByurl
+
+REFACTORING:
+
+- the corresponding components have changed to work with NGRX
+
+BUGS:
+- the basket cleaning method is not implemented.
+
+**0.1.6 (2021.03.08)**
 FEATURES:
 
 - added json-server;
@@ -14,11 +28,9 @@ REFACTORING:
 - changed CartService (added HttpClient, the methods are implemented using the Observable scheme);
 
 BUGS:
+- the basket cleaning method is not implemented.
 
-- CartService используется в нескольких компонентах: CartListComponent, HeaderMenuComponent, ProductListComponent, ProductViewComponent и OrdersGuard, поэтому, логично использовать едииный state для корзины. В качаестве state, была создана переменная cartProducts внутри CartService. При создании сервиса создается подписка на метод получения всех продуктов корзины fetchAllProducts, внутри подписки идет присвоение респонса, переменной cartProducts, но присвоение происходит единожды. Т.е. изменения, которые происходят с помощью других методов CartService в базе данных на серевере, можно увидеть только после перезагрузки страницы. Пока не разобрался с проблемой, планирую решить при переводе работы приложения на NgRx.
-- Не смог реализовать метод очистки корзины. Созданный метод removeAllProducts, для удаления всех записей на сервере, работает не правильно.
-
-**0.1.5 (2020.03.01)**
+**0.1.5 (2021.03.01)**
 FEATURES:
 - create ProductsRoutingModule;
 - create ProductViewComponent;
@@ -58,7 +70,7 @@ REFACTORING:
 - productsMock(addImage);
 - ProductsService;
 
-**0.1.4 (2020.02.07)**
+**0.1.4 (2021.02.07)**
 FEATURES:
 
 - used uppercase pipe in components: cart-item.component (product name), product.component (product name and product category);
@@ -74,7 +86,7 @@ REFACTORING:
 - CartListComponent (template);
 
 
-**0.1.3 (2020.01.31)**
+**0.1.3 (2021.01.31)**
 FEATURES:
 
 - create ConfigOptionsService;
@@ -87,7 +99,7 @@ REFACTORING:
 
 - CartService;
 
-**0.1.2 (2020.01.28)**
+**0.1.2 (2021.01.28)**
 FEATURES:
 
 - create CartModule;
@@ -105,7 +117,7 @@ REFACTORING:
 - CartListComponent;
 - СartItemComponent;
 
-**0.1.1 (2020.01.17)**
+**0.1.1 (2021.01.17)**
 
 FEATURES:
 

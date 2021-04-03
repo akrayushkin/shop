@@ -16,3 +16,16 @@ export interface ProductModel {
   readonly quantity?: number;
   readonly imageURL?: string;
 }
+
+export class Product implements ProductModel {
+  constructor(
+    public id: number = null,
+    public name: string = '',
+    public description: string = '',
+    public price: number = null,
+    public category: Categorys = null,
+    public isAvailable: boolean = true,
+    public quantity: number = null,
+    public imageURL: string = ''
+  ) {}
+}
