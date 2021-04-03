@@ -1,11 +1,12 @@
 **0.1.7 (2021.04.04)**
 FEATURES:
 
-- added to the project @ngrx / store, @ngrx/effect, @ngrx/router-store
+- added to the project @ngrx / store, @ngrx/effect, @ngrx/router-store, @ngrx/entity
 - added products state, products actions, products selectors, products reducer, products effects
 - added cart state, cart actions, cart selectors, cart reducer, cart effects
 - implemented navigation using the 'Go', 'Go Home', 'Forward', 'BACK'
 - combined selector implemented to obtain data by parameter from URL GetProductByurl
+- applies @ngrx/entity to products
 
 REFACTORING:
 

@@ -1,6 +1,6 @@
 import { Action, createReducer, on } from '@ngrx/store';
 
-import { ProductsState, initialProductsState } from './products.state';
+import { adapter, ProductsState, initialProductsState } from './products.state';
 import * as ProductsActions from './products.actions';
 
 const reducer = createReducer(
@@ -17,13 +17,7 @@ const reducer = createReducer(
     ProductsActions.getProductsAdminSuccess,
     (state, { products }) => {
     console.log('GET_PRODUCTS(_ADMIN)_SUCCESS action being handled!');
-    const data = [...products];
-    return {
-      ...state,
-      data,
-      loading: false,
-      loaded: true
-    };
+    return adapter.setAll(products, {...state, loading: false, loaded: true });
   }),
   on(
     ProductsActions.getProductsError,
@@ -44,13 +38,8 @@ const reducer = createReducer(
   }),
   on(ProductsActions.createProductSuccess, (state, { product }) => {
     console.log('CREATE_PRODUCT_SUCCESS action being handled!');
-    const data = [...state.data, { ...product }];
     const originalProduct = { ...product };
-    return {
-      ...state,
-      data,
-      originalProduct
-    };
+    return adapter.addOne(product, {...state, originalProduct});
   }),
   on(ProductsActions.updateProduct, state => {
     console.log('UPDATE_PRODUCT action being handled!');
@@ -58,16 +47,8 @@ const reducer = createReducer(
   }),
   on(ProductsActions.updateProductSuccess, (state, { product }) => {
     console.log('UPDATE_PRODUCT_SUCCESS action being handled!');
-    const data = [...state.data];
-    const index = data.findIndex(t => t.id === product.id);
-    data[index] = { ...product };
     const originalProduct = { ...product };
-
-    return {
-      ...state,
-      data,
-      originalProduct
-    };
+    return adapter.updateOne({ id: product.id, changes: product }, {...state, originalProduct});
   }),
   on(
     ProductsActions.createProductError,
@@ -90,11 +71,7 @@ const reducer = createReducer(
   }),
   on(ProductsActions.deleteProductSuccess, (state, { product }) => {
     console.log('DELETE_TASK_SUCCESS action being handled!');
-    const data = state.data.filter(t => t.id !== product.id);
-    return {
-      ...state,
-      data
-    };
+    return adapter.removeOne(product.id, state);
   }),
   on(ProductsActions.setOriginalProduct, (state, { product }) => {
     const originalProduct = { ...product };
