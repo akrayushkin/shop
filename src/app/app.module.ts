@@ -15,6 +15,7 @@ import { httpInterceptorProviders } from './core/interceptors';
 
 import { AppComponent } from './app.component';
 import { FirstComponent, HeaderMenuComponent } from './components';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 registerLocaleData(localeRu, 'ru');
 
@@ -26,6 +27,7 @@ registerLocaleData(localeRu, 'ru');
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     HttpClientModule,
     ProductsModule,
     CartModule,
@@ -33,7 +35,7 @@ registerLocaleData(localeRu, 'ru');
     LayoutModule,
     RootStoreModule,
     // MUST BE LAST
-    AppRoutingModule,
+    AppRoutingModule
   ],
   providers: [
     httpInterceptorProviders,

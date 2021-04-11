@@ -1,3 +1,76 @@
-<p>
-  process-order works!
-</p>
+<form class="order-form" [formGroup]="formControl" (ngSubmit)="submit()">
+  <mat-form-field class="order-form__field" appearance="outline">
+    <mat-label>Имя</mat-label>
+    <input
+      matInput
+      type="text"
+      placeholder="Имя"
+      formControlName="firstName"
+      (blur)="onBlur($event)"
+    />
+    <mat-error *ngIf="validationMessagesMap.get('firstName').message">
+      {{validationMessagesMap.get('firstName').message}}
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field class="order-form__field" appearance="outline">
+    <mat-label>Фамилия</mat-label>
+    <input
+      matInput
+      type="text"
+      placeholder="Фамилия"
+      formControlName="secondName"
+    />
+  </mat-form-field>
+  <mat-form-field class="order-form__field" appearance="outline">
+    <mat-label>Email</mat-label>
+    <input
+      matInput
+      appEmailValidator
+      type="email"
+      placeholder="Email"
+      formControlName="email"
+      (blur)="onBlur($event)"
+    />
+    <mat-error *ngIf="validationMessagesMap.get('email').message">
+      {{validationMessagesMap.get('email').message}}
+    </mat-error>
+  </mat-form-field>
+
+  <div formArrayName="phones">
+    <div class="order-form__phone-field" *ngFor="let phone of phones.controls; let i = index">
+      <mat-form-field class="order-form__phone-input" appearance="outline" >
+        <mat-label>Телефон</mat-label>
+        <input
+          matInput
+          type="tel"
+          placeholder="Телефон"
+          id="{{'phone' + i}}"
+          [formControlName]="i"
+        />
+      </mat-form-field>
+      <div class="order-form__phone-button">
+        <button *ngIf="i > 0" mat-icon-button color="warn" (click)="onRemovePhone(i)">
+          <mat-icon>remove_circle_outline</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="order-form__add-phone" >
+    <button mat-icon-button (click)="onAddPhone()">
+      <mat-icon>add</mat-icon>
+      <span>add phone</span>
+    </button>
+  </div>
+
+  <mat-checkbox formControlName="selfHelp" (change)="setAddressValidator($event.checked)">
+    <span>Самовывоз</span>
+  </mat-checkbox>
+  <mat-form-field *ngIf="selfHelp.value" class="order-form__field order-form__field--address" appearance="outline">
+    <mat-label>Адрес</mat-label>
+    <textarea matInput formControlName="address" placeholder="Адрес"></textarea>
+  </mat-form-field>
+
+  <section class="order-form__actions">
+    <button class="button-primary" type="submit" [disabled]="formControl.invalid">Send</button>
+  </section>
+</form>

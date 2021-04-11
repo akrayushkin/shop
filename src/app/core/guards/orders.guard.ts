@@ -1,44 +1,37 @@
 import { Injectable } from '@angular/core';
 import {
-  ActivatedRouteSnapshot,
   CanActivate,
   CanLoad,
-  Route,
-  RouterStateSnapshot,
-  UrlSegment,
   UrlTree,
 } from '@angular/router';
 // rxjs
 import { Observable } from 'rxjs';
-import { CartService } from 'src/app/shared/services';
+// ngrx
+import { Store } from '@ngrx/store';
+import { selectIsNotEmptyCart } from './../../core/@ngrx';
+
 
 @Injectable({
   providedIn: 'root',
 })
 export class OrdersGuard implements CanActivate, CanLoad {
-  constructor(private cartService: CartService) {}
+  constructor(private store: Store) {}
 
-  canActivate(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ):
+  canActivate():
     | boolean
     | UrlTree
     | Observable<boolean | UrlTree>
     | Promise<boolean | UrlTree> {
     console.log('CanActivate Guard is called');
-    return !this.cartService.isEmptyCart;
+    return this.store.select(selectIsNotEmptyCart);
   }
 
-  canLoad(
-    route: Route,
-    segments: UrlSegment[]
-  ):
+  canLoad():
     | Observable<boolean | UrlTree>
     | Promise<boolean | UrlTree>
     | boolean
     | UrlTree {
     console.log('CanLoad Guard is called');
-    return !this.cartService.isEmptyCart;
+    return this.store.select(selectIsNotEmptyCart);
   }
 }

@@ -1,0 +1,56 @@
+.order-form {
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+
+  &__field {
+    width: 100%;
+
+    &--address {
+      margin-top: 1em;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: center;
+
+    margin-top: 2em;
+  }
+
+  &__add-phone {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 100%;
+
+    .mat-icon-button {
+      width: auto !important;
+    }
+  }
+
+  &__phone-field {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
+
+  &__phone-input {
+    width: 100%;
+  }
+
+  &__phone-button {
+    position: absolute;
+    top: 0;
+    right: -50px;
+
+    display: flex;
+    align-items: center;
+
+    height: 100%;
+    padding-bottom: 1.34375em;
+  }
+}

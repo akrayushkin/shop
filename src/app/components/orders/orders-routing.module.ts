@@ -3,13 +3,13 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { OrdersGuard } from '../../core';
 
-import { ProcessOrderComponent } from '.';
+import { OrdersComponent } from './orders.component';
 
 const routes: Routes = [
   {
     path: '',
     canActivate: [OrdersGuard],
-    component: ProcessOrderComponent
+    component: OrdersComponent
   }
 ];
 
