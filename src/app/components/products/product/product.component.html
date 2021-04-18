@@ -1,8 +1,8 @@
-<div class="product">
+<div *ngIf="product" class="product">
   <ul class="product__info info">
     <li class="info__field--title">
-      <a class="link" (click)="onViewProduct()">
-        <span>{{product.name | uppercase}}</span>
+      <a class="link product__info-title-link" (click)="onViewProduct()">
+        {{product.name | uppercase}}
       </a>
     </li>
     <li class="info__field--image">

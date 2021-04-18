@@ -4,7 +4,7 @@ import { Subject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 
 import { ProductModel } from 'src/app/models';
-import { CartService, ProductsService } from '../../../shared/services';
+import { CartService } from '../../../shared/services';
 import * as CartActions from '../../../core/@ngrx/cart/cart.actions';
 
 // @NgRx
@@ -21,7 +21,6 @@ export class ProductViewComponent implements OnInit, OnDestroy {
   product: ProductModel;
 
   constructor(
-    public productsService: ProductsService,
     private store: Store,
     private cartService: CartService
   ) { }

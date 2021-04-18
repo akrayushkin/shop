@@ -1,16 +1,25 @@
-/* tslint:disable:no-unused-variable */
-
-import { TestBed, async, inject } from '@angular/core/testing';
 import { ConfigOptionsService } from './config-options.service';
 
+const mockOptions = {
+  login: 'user',
+  email: 'user@email.ru',
+  phoneNumber: 987654321,
+  name: 'Jhon'
+};
+
 describe('Service: ConfigOptions', () => {
+  let service: ConfigOptionsService;
+
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [ConfigOptionsService]
-    });
+    service = new ConfigOptionsService();
   });
 
-  it('should ...', inject([ConfigOptionsService], (service: ConfigOptionsService) => {
-    expect(service).toBeTruthy();
-  }));
+  it('getConfigOptions should return NULL', () => {
+    expect(service.getConfigOptionsById(1)).toBe(null);
+  });
+
+  it('getConfigOptionsById must return the object added by the setConfigOptions method', () => {
+    const optionsID = service.setConfigOptions(mockOptions);
+    expect(service.getConfigOptionsById(optionsID)).toEqual({...mockOptions, id: optionsID});
+  });
 });

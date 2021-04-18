@@ -1,3 +1,12 @@
+**0.1.9 (2021.04.18)**
+FEATURES:
+
+- create an isolated unit test for ConfigOptionsService;
+- create an isolated unit test for OrderByPipe;
+- create a surface unit test for AppComponent;
+- create an integration unit test for ProductComponent;
+- create an integration unit test for ProductViewComponent;
+
 **0.1.7 (2021.04.04)**
 FEATURES:
 
